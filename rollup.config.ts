@@ -58,7 +58,7 @@ const buildNode = {
   input: 'src/node/index.ts',
   external: ['msw'],
   output: {
-    file: 'dist/node/index.js',
+    file: 'node/index.js',
     format: 'cjs',
   },
   plugins: [
@@ -71,7 +71,7 @@ const buildNode = {
     typescript({
       useTsconfigDeclarationDir: true,
       tsconfigOverride: {
-        outDir: './dist/node',
+        outDir: './node',
         declarationDir: './dist/types/node',
       },
     }),

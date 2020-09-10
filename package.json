@@ -1,23 +1,24 @@
 {
   "name": "@tapico/msw-webarchive",
-  "version": "0.45.0",
+  "version": "0.5.0",
   "description": "An utility to drive requests handlers through a `.har` web-archive file",
   "main": "dist/umd/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types",
   "files": [
     "dist",
+    "node",
     "LICENSE",
     "README.md"
   ],
   "scripts": {
     "start": "cross-env NODE_ENV=development rollup -c rollup.config.ts -w",
     "clean": "rimraf dist",
-    "lint": "eslint \"{src}/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\"",
     "build": "yarn clean && cross-env NODE_ENV=production rollup -c rollup.config.ts",
     "test": "yarn test:unit",
     "test:unit": "cross-env BABEL_ENV=test jest --runInBand",
-    "prepublishOnly": "yarn lint && yarn test:unit && yarn build"
+    "prepublishOnly": "yarn test:unit && yarn build"
   },
   "repository": {
     "type": "git",

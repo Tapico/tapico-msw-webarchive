@@ -1,6 +1,6 @@
 # @tapico/msw-webarchive
 
-A utility to drive requests handlers through a `.har` web-archive file for the Mock Service Worker library. This utility allows you easily mock server handlers by using `.har` web-archive file which can be created by using applications like Charles, ProxyMan or the Chrome Developer Tools.
+A utility to drive requests handlers through a `.har` web-archive file for the Mock Service Worker library. This utility allows you to easily mock server handlers by using `.har` web-archive file which can be created by using applications like Charles, ProxyMan or the Chrome Developer Tools.
 
 ## Using the .har file
 

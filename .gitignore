@@ -103,3 +103,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Ignore generated /node build files
+node/
