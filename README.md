@@ -26,3 +26,7 @@ Go to the `Network`-tab in the Developer Tools and right click so the popup cont
 The file that got saved to disk by Chrome can be used by this utility. All the request which were listed in the `Network`-tab will now be mocked by MSW.
 
 [1]: https://mswjs.io/docs/getting-started/install
+
+## Why you use this?
+
+We have been using it during the development of web-applications, while the backend API endpoints weren't available yet or when we want to reproduce a problem of a customer. This way we can request the customer to send us a .har web-archive file and let this file drive the network requests to our back-end, this has greatly eased reproducing problems reported.
