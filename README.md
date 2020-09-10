@@ -69,6 +69,6 @@ export { server }
 
 The `setRequestHandlersByWebarchive` accepts the following options to configure the behaviour:
 
-      * `quiet`: Disable logging of debugging messages (e.g. logs what gets mapped)
-      * `strictQueryString`: Sets whether the query string of the request should be strictly adhered to or can be ignored
-      * `resolveCrossOrigins`: A callback that gets called when the response includes the `Access-Control-Allow-Origin`-header to allow overriding the value of this header.
+   - *quiet*: Disable logging of debugging messages (e.g. logs what gets mapped)
+   - *strictQueryString*: Sets whether the query string of the request should be strictly adhered to or can be ignored
+   - *resolveCrossOrigins*: A callback that gets called when the response includes the `Access-Control-Allow-Origin`-header to allow overriding the value of this header.
