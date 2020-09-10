@@ -50,7 +50,7 @@
   "homepage": "https://github.com/Tapico/tapico-msw-webarchive#readme",
   "sideEffects": false,
   "peerDependencies": {
-    "msw": "^0.20.5"
+    "msw": "^0.21.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^15.0.0",
@@ -69,7 +69,7 @@
     "husky": "^4.3.0",
     "jest": "^26.4.2",
     "lint-staged": "^10.3.0",
-    "msw": "^0.20.5",
+    "msw": "^0.21.0",
     "node-fetch": "^2.6.1",
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
