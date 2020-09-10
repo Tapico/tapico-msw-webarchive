@@ -1,0 +1,82 @@
+{
+  "name": "@tapico/msw-webarchive",
+  "version": "0.45.0",
+  "description": "An utility to drive requests handlers through a `.har` web-archive file",
+  "main": "dist/umd/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "start": "cross-env NODE_ENV=development rollup -c rollup.config.ts -w",
+    "clean": "rimraf dist",
+    "lint": "eslint \"{src}/**/*.ts\"",
+    "build": "yarn clean && cross-env NODE_ENV=production rollup -c rollup.config.ts",
+    "test": "yarn test:unit",
+    "test:unit": "cross-env BABEL_ENV=test jest --runInBand",
+    "prepublishOnly": "yarn lint && yarn test:unit && yarn build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tapico/tapico-msw-webarchive.git"
+  },
+  "keywords": [
+    "msw",
+    "mock",
+    ".har",
+    "devtools"
+  ],
+  "author": {
+    "name": "Weyert de Boer"
+  },
+  "license": "MIT",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/Tapico/tapico-msw-webarchive/issues"
+  },
+  "homepage": "https://github.com/Tapico/tapico-msw-webarchive#readme",
+  "sideEffects": false,
+  "peerDependencies": {
+    "msw": "^0.20.5"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-inject": "^4.0.2",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-replace": "^2.3.3",
+    "@types/node-fetch": "^2.5.7",
+    "@types/set-cookie-parser": "^0.0.6",
+    "@typescript-eslint/eslint-plugin": "^4.1.0",
+    "@typescript-eslint/parser": "^4.1.0",
+    "cross-env": "^7.0.2",
+    "eslint": "^7.8.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "jest": "^26.4.2",
+    "lint-staged": "^10.3.0",
+    "msw": "^0.20.5",
+    "node-fetch": "^2.6.1",
+    "prettier": "^2.1.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.26.11",
+    "rollup-plugin-typescript2": "^0.27.2",
+    "ts-jest": "^26.3.0",
+    "typescript": "^4.0.2"
+  },
+  "dependencies": {
+    "set-cookie-parser": "^2.4.6"
+  }
+}
