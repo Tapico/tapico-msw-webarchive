@@ -48,7 +48,7 @@ describe('webArchiveHandlerProvider', () => {
     )
   })
 
-  it('should handle request with compression response hader from webarchive', async () => {
+  it('should handle request with content-encoding/compression response header from webarchive', async () => {
     setRequestHandlersByWebarchive(server, webarchiveDefinition, {
       quiet: false,
       strictQueryString: true,
