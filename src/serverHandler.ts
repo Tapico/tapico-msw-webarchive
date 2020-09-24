@@ -122,6 +122,13 @@ export const createRequestHandler = (entry: any, options?: ServerDefinitionOptio
           return null
         }
 
+        // if a content-encoding header exists, we should skip it from the response as node-fetch and
+        // other libraries don't appreciate it when you send a response which isn't actually compressed
+        // and at this moment of time. I don't see added value to add support for gzip, brotli
+        if (headerName === 'content-encoding') {
+          return null
+        }
+
         if (headerName === 'access-control-allow-origin') {
           logger(`CORS header detected, requesting new origin for ${value}`)
           const newOrigin = options?.resolveCrossOrigins
