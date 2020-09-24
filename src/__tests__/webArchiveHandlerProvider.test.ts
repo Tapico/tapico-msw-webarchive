@@ -48,6 +48,20 @@ describe('webArchiveHandlerProvider', () => {
     )
   })
 
+  it('should handle request with compression response hader from webarchive', async () => {
+    setRequestHandlersByWebarchive(server, webarchiveDefinition, {
+      quiet: false,
+      strictQueryString: true,
+    })
+
+    const { res } = await fetch(`https://www.paleoanthro.org/`, { method: 'GET' })
+    expect(res.ok).toBe(true)
+    const responseText = await res.text()
+    expect(responseText).toMatch(
+      /Daily archaeological news and exclusive online features, plus articles from the current issue and back issues/gi
+    )
+  })
+
   it('should trigger origin callback when requested', async () => {
     const resolveCrossOrigins = jest.fn().mockImplementation(() => 'https://mswjs.io')
     setRequestHandlersByWebarchive(server, corsExampleDefinition, {
