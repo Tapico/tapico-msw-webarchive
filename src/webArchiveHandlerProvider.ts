@@ -1,5 +1,4 @@
-import { RequestHandlersList } from 'msw/lib/types/setupWorker/glossary'
-import { SetupWorkerApi } from 'msw/lib/types/setupWorker/setupWorker'
+import { RequestHandler, SetupWorkerApi } from 'msw'
 import {
   ServerDefinitionOptions,
   createRequestHandler,
@@ -21,7 +20,7 @@ export function setRequestHandlersByWebarchive(
 ) {
   const entries = getEntriesFromWebarchive(definitions)
 
-  const requestHandlers: RequestHandlersList = entries.map((definitionEntry: any) => {
+  const requestHandlers: RequestHandler[] = entries.map((definitionEntry: any) => {
     return createRequestHandler(definitionEntry, options)
   })
 
