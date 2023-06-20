@@ -6,7 +6,8 @@ export interface ServerDefinitionOptions {
   strictQueryString?: boolean
   useUniqueRequests?: boolean
   resolveCrossOrigins?: (origin: string) => string
-  quiet?: boolean
+  quiet?: boolean,
+  domainMapping?: Record<string, string>;
 }
 
 interface ItemTuple {
@@ -40,8 +41,6 @@ export function getEntriesFromWebarchive(definition: Record<string, any>): any[]
 export const createRequestHandler = (entry: any, options?: ServerDefinitionOptions) => {
   const { request, response, time: processingTime } = entry
   const { url } = request
-  const requestMethod = request.method.toLowerCase()
-  const supportedMethods = Object.keys(rest)
 
   const logger = (level: string, ...args: any[]) => {
     if (options?.quiet) return
@@ -54,12 +53,33 @@ export const createRequestHandler = (entry: any, options?: ServerDefinitionOptio
     }
   }
 
+  if (typeof url !== 'string') {
+    throw new Error(`url must a string, got: '${typeof url}'`)
+  }
+
+  let urlToUse = url;
+  if (options?.domainMapping) {
+
+    for (const entry of Object.entries(options.domainMapping)) {
+
+      const [from, to] = entry;
+      if (urlToUse.startsWith(from)) {
+        urlToUse = urlToUse.replace(from, to);
+        logger(`mapping '${url}' to '${urlToUse}'`)
+        break;
+      }
+    }
+  }
+
+  const requestMethod = request.method.toLowerCase()
+  const supportedMethods = Object.keys(rest)
+
   logger(`Registering route for ${entry.request.method} for ${entry.request.url}`)
   if (!supportedMethods.includes(requestMethod)) {
     return null
   }
 
-  const parsedUrl = new URL(url)
+  const parsedUrl = new URL(urlToUse)
   const fullQualifiedUrl = parsedUrl.href.replace(parsedUrl.search, '')
 
   // check if we need to look some warnings to the Console or not

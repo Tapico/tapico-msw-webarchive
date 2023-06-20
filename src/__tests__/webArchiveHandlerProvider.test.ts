@@ -4,6 +4,7 @@ import { fetch } from '../../utils/index'
 import { default as webarchiveDefinition } from '../../example/webarchive.har'
 import { default as emptyWebarchiveDefinition } from '../../example/empty-webarchive.har'
 import { default as corsExampleDefinition } from '../../example/cors-example.har'
+import { default as localhostExampleDefinition } from '../../example/localhost.har'
 
 describe('webArchiveHandlerProvider', () => {
   beforeAll(() => {
@@ -23,7 +24,7 @@ describe('webArchiveHandlerProvider', () => {
 
   it('should warn when no definitions are given', () => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    jest.spyOn(console, 'warn').mockImplementation(() => {})
+    jest.spyOn(console, 'warn').mockImplementation(() => { })
     setRequestHandlersByWebarchive(server, emptyWebarchiveDefinition, {
       quiet: false,
       strictQueryString: true,
@@ -81,4 +82,29 @@ describe('webArchiveHandlerProvider', () => {
     const responseText = await res.json()
     expect(responseText).toEqual(expect.objectContaining({ name: 'Luke Skywalker' }))
   })
+
+
+  it("should remap origins if requested", async () => {
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    jest.spyOn(console, 'warn').mockImplementation(() => { })
+    setRequestHandlersByWebarchive(server, localhostExampleDefinition, {
+      quiet: true,
+      domainMapping: {
+        "http://localhost:4000": "http://localhost:1000"
+      }
+    });
+
+    const { res } = await fetch(`http:/localhost:1000/hello`, {
+      method: 'GET',
+    });
+
+    expect(res.status).toBe(200);
+    expect(res.ok).toBe(true)
+
+    const json = await res.json();
+    expect(json.foo).toBe("bar")
+
+    expect(console.warn).not.toHaveBeenCalled();
+  });
 })
