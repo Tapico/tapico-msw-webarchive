@@ -7,7 +7,7 @@ export interface ServerDefinitionOptions {
   useUniqueRequests?: boolean
   resolveCrossOrigins?: (origin: string) => string
   quiet?: boolean,
-  domainMapping?: Record<string, string>;
+  domainMappings?: Record<string, string>;
 }
 
 interface ItemTuple {
@@ -58,9 +58,9 @@ export const createRequestHandler = (entry: any, options?: ServerDefinitionOptio
   }
 
   let urlToUse = url;
-  if (options?.domainMapping) {
+  if (options?.domainMappings) {
 
-    for (const entry of Object.entries(options.domainMapping)) {
+    for (const entry of Object.entries(options.domainMappings)) {
 
       const [from, to] = entry;
       if (urlToUse.startsWith(from)) {
