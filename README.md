@@ -94,4 +94,21 @@ setRequestHandlersByWebarchive(worker, har, {
 })
 ```
 
+### `domainMappings: Record<string, string>`
+
+- Default: `undefined`
+
+Allow mapping the domains in your har file to something else. This may be useful if you are making relative requests against the origin (eg. `fetch('/hello')`), you may want to use a domainMapping configuration like: 
+
+```js
+setRequestHandlersByWebarchive(worker, har, {
+  domainMappings: {
+    "http://example.com" : "http://localhost"    
+  }
+}); 
+```
+
+
+
+
 [msw-install]: https://mswjs.io/docs/getting-started/install
