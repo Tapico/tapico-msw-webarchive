@@ -1,6 +1,4 @@
-import { rest, restContext, MockedRequest, ResponseResolver } from 'msw'
-import { ResponseComposition } from 'msw/lib/types/response'
-import * as setCookie from 'set-cookie-parser'
+import { delay, http, HttpResponse, ResponseResolver, HttpRequestHandler } from 'msw'
 
 export interface ServerDefinitionOptions {
   strictQueryString?: boolean
@@ -8,11 +6,6 @@ export interface ServerDefinitionOptions {
   resolveCrossOrigins?: (origin: string) => string
   quiet?: boolean,
   domainMappings?: Record<string, string>;
-}
-
-interface ItemTuple {
-  name: string
-  value: string
 }
 
 /**
@@ -72,7 +65,7 @@ export const createRequestHandler = (entry: any, options?: ServerDefinitionOptio
   }
 
   const requestMethod = request.method.toLowerCase()
-  const supportedMethods = Object.keys(rest)
+  const supportedMethods = Object.keys(http).filter(method => method !== 'all')
 
   logger(`Registering route for ${entry.request.method} for ${entry.request.url}`)
   if (!supportedMethods.includes(requestMethod)) {
@@ -85,16 +78,12 @@ export const createRequestHandler = (entry: any, options?: ServerDefinitionOptio
   // check if we need to look some warnings to the Console or not
   const shouldLog = options?.quiet === false
 
-  const resolver: ResponseResolver<MockedRequest, typeof restContext> = (
-    req: MockedRequest,
-    res: ResponseComposition,
-    ctx: typeof restContext
-  ) => {
+  const resolver: ResponseResolver = async ({ request }) => {
     const { content: responseBody, status: responseStatus, headers } = response
 
     // If we strict query string is requested, we will only handle the request when it matches
     if (options?.strictQueryString) {
-      const mockRequestUrlInfo = req.url
+      const mockRequestUrlInfo = new URL(request.url)
       if (parsedUrl.search !== mockRequestUrlInfo.search) {
         if (shouldLog) {
           logger('warn', '[WARNING] Query string did not match')
@@ -110,56 +99,27 @@ export const createRequestHandler = (entry: any, options?: ServerDefinitionOptio
       const responseBuffer = Uint8Array.from(atob(responseBody.text), (c) => c.charCodeAt(0))
       responseData = responseBuffer
     }
-    const responseContext = ctx.body(responseData)
-
-    // If there are any Set-Cookie headers we should parse them and process them
-    const cookieHeaders = headers.filter(
-      (item: ItemTuple) => item.name.toLowerCase() === 'set-cookie'
-    )
-    let responseCookies = []
-    if (cookieHeaders.length) {
-      responseCookies = cookieHeaders
-        .map(({ value: cookieString }: { name: string; value: string }) => {
-          const [parsedCookie] = setCookie.parse(cookieString)
-          const { name, value, httpOnly, path, sameSite, secure, expires } = parsedCookie
-          return ctx.cookie(name, value, {
-            domain: parsedUrl.host,
-            path,
-            httpOnly,
-            sameSite: sameSite !== '',
-            expires,
-            secure,
-          })
-        })
-        .filter(Boolean)
-    }
 
     // Set the all headers for the response
     const responseHeaders = headers
-      .map(({ name, value }: { name: string; value: string }) => {
-        const headerName = name.toLowerCase()
-        if (cookieHeaders.length && headerName === 'set-cookie') {
-          return null
+      .reduce((headerObj: Record<string, string>, { name, value }: { name: string; value: string }) => {
+        const lowercaseName = name.toLowerCase()
+        if (lowercaseName === 'content-encoding') {
+          // if a content-encoding header exists, we should skip it from the response as node-fetch and
+          // other libraries don't appreciate it when you send a response which isn't actually compressed
+          // and at this moment of time. I don't see added value to add support for gzip, brotli
+          return headerObj
         }
-
-        // if a content-encoding header exists, we should skip it from the response as node-fetch and
-        // other libraries don't appreciate it when you send a response which isn't actually compressed
-        // and at this moment of time. I don't see added value to add support for gzip, brotli
-        if (headerName === 'content-encoding') {
-          return null
-        }
-
-        if (headerName === 'access-control-allow-origin') {
+        if (lowercaseName === 'access-control-allow-origin') {
           logger(`CORS header detected, requesting new origin for ${value}`)
-          const newOrigin = options?.resolveCrossOrigins
-            ? options?.resolveCrossOrigins(value)
+          value = options?.resolveCrossOrigins
+            ? options.resolveCrossOrigins(value)
             : value
-          value = newOrigin
         }
 
-        return ctx.set(name, value)
-      })
-      .filter(Boolean)
+        headerObj[name] = value
+        return headerObj;
+      }, {})
 
     // If the request-response pair has a `time`-property populated we use it as the delay for the mock response
     const responseDelayTime = processingTime ? processingTime : 0
@@ -167,23 +127,17 @@ export const createRequestHandler = (entry: any, options?: ServerDefinitionOptio
       if (shouldLog) {
         logger('warn', `Response will be delayed with ${responseDelayTime}ms`)
       }
+      await delay(responseDelayTime)
     }
 
-    const registerResolver = options?.useUniqueRequests ? res : res.once
-    return registerResolver(
-      ...[
-        ...responseHeaders,
-        ...responseCookies,
-        responseContext,
-        ctx.delay(responseDelayTime),
-        ctx.status(responseStatus),
-        ctx.json({ status: true }),
-      ]
-    )
+    return new HttpResponse(responseData, {
+      headers: responseHeaders,
+      status: responseStatus
+    })
   }
 
   // Ensure the right request route method is used for the registration
-  const route = (rest as any)[requestMethod](fullQualifiedUrl, resolver)
+  const route = ((http as any)[requestMethod] as HttpRequestHandler)(fullQualifiedUrl, resolver, { once: !!options?.useUniqueRequests })
   if (!route) {
     return null
   }

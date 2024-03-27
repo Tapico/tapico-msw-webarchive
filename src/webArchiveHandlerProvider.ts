@@ -1,4 +1,5 @@
-import { RequestHandler, SetupWorkerApi } from 'msw'
+import { HttpHandler } from 'msw'
+import { SetupWorker } from 'msw/browser'
 import {
   ServerDefinitionOptions,
   createRequestHandler,
@@ -14,16 +15,15 @@ import {
  * @param options         the options
  */
 export function setRequestHandlersByWebarchive(
-  serverInstance: SetupWorkerApi,
+  serverInstance: SetupWorker,
   definitions: Record<string, any>,
   options?: ServerDefinitionOptions
 ) {
   const entries = getEntriesFromWebarchive(definitions)
 
-  const requestHandlers: RequestHandler[] = entries.map((definitionEntry: any) => {
-    return createRequestHandler(definitionEntry, options)
-  })
+  const requestHandlers: HttpHandler[] = entries
+    .map((definitionEntry: any) => createRequestHandler(definitionEntry, options))
+    .filter(handler => handler !== null) as HttpHandler[]
 
-  const filteredRequestHandlers = requestHandlers.filter(Boolean)
-  serverInstance.use(...filteredRequestHandlers)
+  serverInstance.use(...requestHandlers)
 }
