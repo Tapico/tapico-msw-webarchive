@@ -90,7 +90,7 @@ describe('webArchiveHandlerProvider', () => {
     jest.spyOn(console, 'warn').mockImplementation(() => { })
     setRequestHandlersByWebarchive(server, localhostExampleDefinition, {
       quiet: true,
-      domainMapping: {
+      domainMappings: {
         "http://localhost:4000": "http://localhost:1000"
       }
     });
