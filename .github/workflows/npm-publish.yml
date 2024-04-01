@@ -29,17 +29,20 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: yarn install --frozen-lockfile
+      - name: Install package
+        shell: bash
+        run: |
+          yarn install --frozen-lockfile
       - name: Release package
         id: release
         uses: google-github-actions/release-please-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          release-type: simple
-          config-file: release-please-config.json
-          manifest-file: .release-please-manifest.json
+          release-type: node
       - name: Publish package to NPM
-        run: yarn publish
         if: ${{ steps.release.outputs.release_created }}
+        shell: bash
+        run: |
+          yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
