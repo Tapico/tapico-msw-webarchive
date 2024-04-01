@@ -40,7 +40,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
       - name: Publish package to NPM
-        if: ${{ steps.release.outputs.release_created }}
+        # if: ${{ steps.release.outputs.release_created }}
         shell: bash
         run: |
           yarn publish --access=public --verbose
