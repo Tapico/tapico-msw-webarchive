@@ -43,6 +43,6 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         shell: bash
         run: |
-          yarn publish
+          yarn publish --access=public --verbose
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
