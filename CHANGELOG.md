@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/Tapico/tapico-msw-webarchive/compare/v1.0.0...v1.0.1) (2024-04-01)
+
+
+### Bug Fixes
+
+* small change to trigger release ([#25](https://github.com/Tapico/tapico-msw-webarchive/issues/25)) ([8f7ecea](https://github.com/Tapico/tapico-msw-webarchive/commit/8f7ecea5ce14d32f4357ed765be1dde437b04ea1))
+
 ## [1.0.0](https://github.com/Tapico/tapico-msw-webarchive/compare/v0.5.0...v1.0.0) (2024-04-01)
 
 
