@@ -9,7 +9,6 @@
       "release-type": "node",
       "bump-minor-pre-major": false,
       "bump-patch-for-minor-pre-major": false,
-      "release-as": "1.0.0",
       "draft": false,
       "prerelease": false
     }

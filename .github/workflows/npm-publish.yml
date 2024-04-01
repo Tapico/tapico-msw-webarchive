@@ -37,3 +37,8 @@ jobs:
           release-type: simple
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+      - name: Publish package to NPM
+        run: yarn publish
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
