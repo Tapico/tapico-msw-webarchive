@@ -11,12 +11,14 @@
       "require": "./dist/umd/index.js",
       "import": "./dist/esm/index.js"
     },
+    "./node": "./node/index.js",
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
     "node",
     "LICENSE",
+    "CHANGELOG.md",
     "README.md"
   ],
   "scripts": {
