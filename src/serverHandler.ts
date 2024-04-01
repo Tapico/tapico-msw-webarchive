@@ -10,6 +10,7 @@ export interface ServerDefinitionOptions {
 
 /**
  * @private
+ * Returns the entries defined in the web-archive file
  * @param definition the definition
  */
 export function getEntriesFromWebarchive(definition: Record<string, any>): any[] {
