@@ -1,6 +1,6 @@
 {
   "name": "@tapico/msw-webarchive",
-  "version": "0.6.0",
+  "version": "1.0.1",
   "description": "An utility to drive requests handlers through a `.har` web-archive file",
   "main": "dist/umd/index.js",
   "module": "dist/esm/index.js",
