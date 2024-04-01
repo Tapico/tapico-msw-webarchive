@@ -1,4 +1,5 @@
-import { RequestHandler } from 'msw'
+import { HttpHandler } from 'msw'
+import { SetupServer } from 'msw/node'
 import {
   ServerDefinitionOptions,
   createRequestHandler,
@@ -13,12 +14,8 @@ import {
  * @param definitions     the contents of the WebArchive file (.har)
  * @param options         the options
  */
-export interface SetupWorkerNodeApi {
-  use(...handlers: RequestHandler[]): void
-}
-
 export function setRequestHandlersByWebarchive(
-  serverInstance: SetupWorkerNodeApi,
+  serverInstance: SetupServer,
   definitions: Record<string, any> = {},
   options?: ServerDefinitionOptions
 ) {
@@ -29,9 +26,9 @@ export function setRequestHandlersByWebarchive(
     }
   }
 
-  const requestHandlers: RequestHandler[] = entries.map((definitionEntry: any) => {
+  const requestHandlers: HttpHandler[] = entries.map((definitionEntry: any) => {
     return createRequestHandler(definitionEntry, options)
-  })
+  }).filter(handler => handler !== null) as HttpHandler[]
 
   const filteredRequestHandlers = requestHandlers.filter(Boolean)
   serverInstance.use(...filteredRequestHandlers)
