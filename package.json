@@ -27,7 +27,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development rollup -c rollup.config.ts -w",
     "clean": "rimraf dist",
-    "lint": "eslint n \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\"",
     "format": "prettier .",
     "build": "pnpm run clean && cross-env NODE_ENV=production rollup -c rollup.config.mjs",
     "test": "pnpm run test:unit",
