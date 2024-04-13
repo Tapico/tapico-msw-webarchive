@@ -75,7 +75,7 @@ jobs:
         id: release
         uses: google-github-actions/release-please-action@v4.1.0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
           release-type: node
       - name: Publish package to NPM
         if: ${{ steps.release.outputs.release_created }}
