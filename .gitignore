@@ -106,3 +106,5 @@ dist
 
 # Ignore generated /node build files
 node/
+
+.github*.yml

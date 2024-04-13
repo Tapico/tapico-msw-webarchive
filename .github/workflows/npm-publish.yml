@@ -17,9 +17,25 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: yarn install --frozen-lockfile
-      - run: yarn run test
-      - run: yarn run build
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@tapico'
+      - uses: pnpm/action-setup@v3.0.0
+        with:
+          version: 8
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run test
+      - run: pnpm run build
 
   release-please:
     name: Release
@@ -31,20 +47,36 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - name: Install package
+          scope: '@tapico'
+      - uses: pnpm/action-setup@v3.0.0
+        with:
+          version: 8
+          run_install: false
+      - name: Get pnpm store directory
         shell: bash
         run: |
-          yarn install --frozen-lockfile
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Install packages
+        shell: bash
+        run: |
+          pnpm install --frozen-lockfile
       - name: Release package
         id: release
-        uses: google-github-actions/release-please-action@v4
+        uses: google-github-actions/release-please-action@v4.1.0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
           release-type: node
       - name: Publish package to NPM
         # if: ${{ steps.release.outputs.release_created }}
         shell: bash
         run: |
-          npm publish --access=public --verbose
+          pnpm publish --access=public --verbose
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
