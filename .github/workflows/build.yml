@@ -56,11 +56,11 @@ jobs:
         run: pnpm run lint
 
       - name: Annotate Code Linting Results
-        uses: ataylorme/eslint-annotate-action@1.0.4
+        uses: ataylorme/eslint-annotate-action@2.2.0
         if: always()
         with:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
-          report-json: 'coverage/eslint_report.json'
+          report-json: 'coverage/eslint-problems.json'
 
       - name: Build
         run: pnpm run build
