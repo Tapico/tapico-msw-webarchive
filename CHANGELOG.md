@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/Tapico/tapico-msw-webarchive/compare/v1.0.2...v1.0.3) (2024-04-13)
+
+
+### Bug Fixes
+
+* remove the missing version:update call ([22f0e9e](https://github.com/Tapico/tapico-msw-webarchive/commit/22f0e9ed4afee233d4a5db5f09b7e1a23019e9d5))
+
 ## [1.0.2](https://github.com/Tapico/tapico-msw-webarchive/compare/v1.0.1...v1.0.2) (2024-04-13)
 
 
