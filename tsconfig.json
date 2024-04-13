@@ -13,7 +13,7 @@
     "lib": ["es2017", "ESNext.AsyncIterable", "dom"],
     "importHelpers": true,
     "paths": {
-      "tslib" : ["./node_modules/tslib/tslib.d.ts"]
+      "tslib": ["./node_modules/tslib/tslib.d.ts"]
     }
   },
   "include": ["global.d.ts", "src/**/*.ts"],
