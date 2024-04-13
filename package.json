@@ -24,7 +24,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development rollup -c rollup.config.ts -w",
     "clean": "rimraf dist",
-    "lint": "eslint --output-file \"coverage/eslint-problems.json\" --format json \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\"",
     "build": "pnpm run clean && cross-env NODE_ENV=production rollup -c rollup.config.mjs",
     "test": "pnpm run test:unit",
     "test:unit": "cross-env BABEL_ENV=test jest --runInBand",

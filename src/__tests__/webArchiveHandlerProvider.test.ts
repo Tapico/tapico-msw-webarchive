@@ -4,9 +4,10 @@ import { default as webarchiveDefinition } from '../../example/webarchive.har'
 import { default as emptyWebarchiveDefinition } from '../../example/empty-webarchive.har'
 import { default as corsExampleDefinition } from '../../example/cors-example.har'
 import { default as localhostExampleDefinition } from '../../example/localhost.har'
-import type { Headers } from 'undici'
 
-const noop = () => { /* noop */}
+const noop = () => {
+  /* noop */
+}
 
 describe('webArchiveHandlerProvider', () => {
   beforeAll(() => {
@@ -140,10 +141,10 @@ describe('webArchiveHandlerProvider', () => {
   it('should support strict query string matching when enabled', async () => {
     setRequestHandlersByWebarchive(server, webarchiveDefinition, {
       strictQueryString: true,
-      quiet: false
+      quiet: false,
     })
 
-    const res = await fetch('https://www.archaeology.org?query=string', { method: 'GET' });
-    expect(await res.json()).toEqual({ query: 'string'})
+    const res = await fetch('https://www.archaeology.org?query=string', { method: 'GET' })
+    expect(await res.json()).toEqual({ query: 'string' })
   })
 })
