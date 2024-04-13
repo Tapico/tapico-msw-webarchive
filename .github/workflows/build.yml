@@ -4,10 +4,11 @@ name: Build Test
 
 on:
   pull_request:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
   build:
+    name: Build with Node.js ${{ matrix.node-version }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -16,18 +17,25 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: 'Installing PNPM'
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: pnpm/action-setup@v3.0.0
-        with:
-          version: 8
-          run_install: false
+          cache: pnpm
+          registry-url: https://registry.npmjs.org/
+
       - name: Get pnpm store directory
         shell: bash
         run: |
+          pnpm store path --silent
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
       - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
@@ -35,9 +43,17 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+
       - name: Install packages
         shell: bash
         run: |
           pnpm install --frozen-lockfile
-      - run: pnpm run test
-      - run: pnpm run build
+
+      - name: Unit tests
+        run: pnpm run test
+
+      - name: Code quality
+        run: pnpm run lint
+
+      - name: Build
+        run: pnpm run build
