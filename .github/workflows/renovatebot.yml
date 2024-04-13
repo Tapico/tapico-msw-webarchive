@@ -26,13 +26,13 @@ jobs:
 
       # Don't waste time starting Renovate if JSON is invalid
       - name: Validate Renovate JSON
-        run: jq type .github/renovate.json5
+        run: jq type .github/renovate.json
 
       - name: Self-hosted Renovate
         uses: renovatebot/github-action@v40.1.9
         with:
           renovate-version: full
-          configurationFile: .github/renovate.json5
+          configurationFile: .github/renovate.json
           token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
         env:
           # Repository taken from variable to keep configuration file generic
