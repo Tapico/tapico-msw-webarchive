@@ -4,8 +4,8 @@ export interface ServerDefinitionOptions {
   strictQueryString?: boolean
   useUniqueRequests?: boolean
   resolveCrossOrigins?: (origin: string) => string
-  quiet?: boolean,
-  domainMappings?: Record<string, string>;
+  quiet?: boolean
+  domainMappings?: Record<string, string>
 }
 
 /**
@@ -51,22 +51,20 @@ export const createRequestHandler = (entry: any, options?: ServerDefinitionOptio
     throw new Error(`url must a string, got: '${typeof url}'`)
   }
 
-  let urlToUse = url;
+  let urlToUse = url
   if (options?.domainMappings) {
-
     for (const entry of Object.entries(options.domainMappings)) {
-
-      const [from, to] = entry;
+      const [from, to] = entry
       if (urlToUse.startsWith(from)) {
-        urlToUse = urlToUse.replace(from, to);
+        urlToUse = urlToUse.replace(from, to)
         logger(`mapping '${url}' to '${urlToUse}'`)
-        break;
+        break
       }
     }
   }
 
   const requestMethod = request.method.toLowerCase()
-  const supportedMethods = Object.keys(http).filter(method => method !== 'all')
+  const supportedMethods = Object.keys(http).filter((method) => method !== 'all')
 
   logger(`Registering route for ${entry.request.method} for ${entry.request.url}`)
   if (!supportedMethods.includes(requestMethod)) {
@@ -102,8 +100,8 @@ export const createRequestHandler = (entry: any, options?: ServerDefinitionOptio
     }
 
     // Set the all headers for the response
-    const responseHeaders = headers
-      .reduce((headerObj: Record<string, string>, { name, value }: { name: string; value: string }) => {
+    const responseHeaders = headers.reduce(
+      (headerObj: Record<string, string>, { name, value }: { name: string; value: string }) => {
         const lowercaseName = name.toLowerCase()
         if (lowercaseName === 'content-encoding') {
           // if a content-encoding header exists, we should skip it from the response as node-fetch and
@@ -113,14 +111,14 @@ export const createRequestHandler = (entry: any, options?: ServerDefinitionOptio
         }
         if (lowercaseName === 'access-control-allow-origin') {
           logger(`CORS header detected, requesting new origin for ${value}`)
-          value = options?.resolveCrossOrigins
-            ? options.resolveCrossOrigins(value)
-            : value
+          value = options?.resolveCrossOrigins ? options.resolveCrossOrigins(value) : value
         }
 
         headerObj[name] = value
-        return headerObj;
-      }, {})
+        return headerObj
+      },
+      {}
+    )
 
     // If the request-response pair has a `time`-property populated we use it as the delay for the mock response
     const responseDelayTime = processingTime ? processingTime : 0
@@ -133,12 +131,14 @@ export const createRequestHandler = (entry: any, options?: ServerDefinitionOptio
 
     return new HttpResponse(responseData, {
       headers: responseHeaders,
-      status: responseStatus
+      status: responseStatus,
     })
   }
 
   // Ensure the right request route method is used for the registration
-  const route = ((http as any)[requestMethod] as HttpRequestHandler)(fullQualifiedUrl, resolver, { once: !!options?.useUniqueRequests })
+  const route = ((http as any)[requestMethod] as HttpRequestHandler)(fullQualifiedUrl, resolver, {
+    once: !!options?.useUniqueRequests,
+  })
   if (!route) {
     return null
   }

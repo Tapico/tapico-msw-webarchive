@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       logLevel:
-        description: "Override default log level"
+        description: 'Override default log level'
         required: false
-        default: "info"
+        default: 'info'
         type: string
       overrideSchedule:
-        description: "Override all schedules"
+        description: 'Override all schedules'
         required: false
-        default: "false"
+        default: 'false'
         type: string
   # Run twice in the early morning for initial and follow up steps (create pull request and merge)
   schedule:
@@ -37,7 +37,8 @@ jobs:
         env:
           # Repository taken from variable to keep configuration file generic
           RENOVATE_REPOSITORIES: ${{ github.repository }}
-          RENOVATE_ONBOARDING: "false"
-          RENOVATE_PLATFORM_COMMIT: "true"
-          RENOVATE_FORCE: ${{ github.event.inputs.overrideSchedule == 'true' && '{''schedule'':null}' || '' }}
+          RENOVATE_ONBOARDING: 'false'
+          RENOVATE_PLATFORM_COMMIT: 'true'
+          RENOVATE_FORCE:
+            ${{ github.event.inputs.overrideSchedule == 'true' && '{''schedule'':null}' || '' }}
           LOG_LEVEL: ${{ inputs.logLevel || 'info' }}
