@@ -4,6 +4,7 @@ import { default as webarchiveDefinition } from '../../example/webarchive.har'
 import { default as emptyWebarchiveDefinition } from '../../example/empty-webarchive.har'
 import { default as corsExampleDefinition } from '../../example/cors-example.har'
 import { default as localhostExampleDefinition } from '../../example/localhost.har'
+import type { Headers } from 'undici'
 
 const noop = () => { /* noop */}
 
@@ -125,7 +126,9 @@ describe('webArchiveHandlerProvider', () => {
     setRequestHandlersByWebarchive(server, webarchiveDefinition)
 
     const { headers } = await fetch(testUrl, { method: 'GET' })
-    const numHeaders = Array.from(headers.entries()).length
+    const headersIterator = (headers as any).entries()
+
+    const numHeaders = Array.from(headersIterator).length
     expect(numHeaders).toBeGreaterThan(0)
     expect(numHeaders).toEqual(expectedHeaders.length)
     expectedHeaders.forEach(({ name, value }: { name: string; value: string }) => {
@@ -137,7 +140,7 @@ describe('webArchiveHandlerProvider', () => {
   it('should support strict query string matching when enabled', async () => {
     setRequestHandlersByWebarchive(server, webarchiveDefinition, {
       strictQueryString: true,
-      quiet: false 
+      quiet: false
     })
 
     const res = await fetch('https://www.archaeology.org?query=string', { method: 'GET' });

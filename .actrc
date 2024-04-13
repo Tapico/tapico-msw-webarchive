@@ -1,0 +1,7 @@
+-P ubuntu-latest=catthehacker/ubuntu:act-latest
+--container-architecture linux/amd64
+--env-file .env.local
+--secret-file .github.secrets.yml
+--var-file .github.vars.yml
+--action-offline-mode
+--artifact-server-path /tmp/artifacts
