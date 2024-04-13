@@ -8,7 +8,7 @@ module.exports = {
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(j|t)sx?$',
   testEnvironment: 'jsdom',
   testEnvironmentOptions: {
-    customExportConditions: ['']
+    customExportConditions: [''],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
 }

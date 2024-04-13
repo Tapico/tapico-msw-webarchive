@@ -23,7 +23,7 @@ export function setRequestHandlersByWebarchive(
 
   const requestHandlers: HttpHandler[] = entries
     .map((definitionEntry: any) => createRequestHandler(definitionEntry, options))
-    .filter(handler => handler !== null) as HttpHandler[]
+    .filter((handler) => handler !== null) as HttpHandler[]
 
   serverInstance.use(...requestHandlers)
 }
