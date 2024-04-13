@@ -8,28 +8,28 @@ on:
   push:
     branches: [main]
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@tapico'
-      - uses: pnpm/action-setup@v3.0.0
-        with:
-          version: 8
+          cache: pnpm
+          registry-url: https://registry.npmjs.org/
+
       - name: Get pnpm store directory
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
       - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
@@ -37,9 +37,21 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run test
-      - run: pnpm run build
+
+      - name: Install packages
+        shell: bash
+        run: |
+          pnpm install --frozen-lockfile
+
+      - name: Unit tests
+        shell: bash
+        run: |
+          pnpm run test
+
+      - name: Build
+        shell: bash
+        run: |
+          pnpm run build
 
   release-please:
     name: Release
@@ -47,19 +59,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: pnpm
           registry-url: https://registry.npmjs.org/
-          scope: '@tapico'
-      - uses: pnpm/action-setup@v3.0.0
-        with:
-          version: 8
-          run_install: false
+
       - name: Get pnpm store directory
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
       - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
@@ -67,16 +82,19 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+
       - name: Install packages
         shell: bash
         run: |
           pnpm install --frozen-lockfile
+
       - name: Release package
         id: release
-        uses: google-github-actions/release-please-action@v4.1.0
+        uses: google-github-actions/release-please-action@v4
         with:
-          token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
+
       - name: Publish package to NPM
         if: ${{ steps.release.outputs.release_created }}
         shell: bash
