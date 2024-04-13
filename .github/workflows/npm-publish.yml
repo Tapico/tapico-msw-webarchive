@@ -8,6 +8,10 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   build:
     name: Build
@@ -74,7 +78,7 @@ jobs:
           token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
           release-type: node
       - name: Publish package to NPM
-        # if: ${{ steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.release_created }}
         shell: bash
         run: |
           pnpm publish --access=public --verbose
