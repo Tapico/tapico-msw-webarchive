@@ -86,7 +86,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "lint-staged": "^15.2.2",
     "msw": "^2.2.13",
-    "node-fetch": "^2.7.0",
+    "node-fetch": "^3.0.0",
     "prettier": "^3.2.5",
     "release-please": "^16.10.1",
     "rimraf": "^5.0.5",
