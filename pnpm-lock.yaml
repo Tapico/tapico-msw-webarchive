@@ -70,7 +70,7 @@ devDependencies:
     version: 3.2.5
   release-please:
     specifier: ^16.10.1
-    version: 16.10.1
+    version: 16.10.2
   rimraf:
     specifier: ^5.0.5
     version: 5.0.5
@@ -4384,8 +4384,8 @@ packages:
       strip-indent: 3.0.0
     dev: true
 
-  /release-please@16.10.1:
-    resolution: {integrity: sha512-1F10PG8WIBmC/89GaJpjBtr/c2e4AZFiR39Z4L2IEgHf1CDmgqgqiTNO1oRgb8pg48uiImb2U9N8QUANBLHq2w==}
+  /release-please@16.10.2:
+    resolution: {integrity: sha512-OX6N7xx3F3ZCd1+B7yq2Ix6KfuA7zXxMP04q3xYic3Hb0X/dOzy8p50xnrxzFpIVJridp1Dn74dUgzjImK6Mdg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dependencies:
