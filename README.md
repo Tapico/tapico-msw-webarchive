@@ -120,4 +120,35 @@ setRequestHandlersByWebarchive(worker, har, {
 })
 ```
 
+### `responseDelay: 'real' | 'none' | ResponseDelayFunction`
+
+- Default: `real`
+
+Controls the mock response delay behavior.
+- __real__: Responses will be delayed based on the `time` property in the HAR
+- __none__: Responses will not be delayed
+- __ResponseDelayFunction__: Responses will be delayed by the value returned by the function 
+  - Signature: `(timeDelay: number, requestContext: Request) => number`
+  - Parameters:
+    - `timeDelay`: the value of the `time` property in the HAR, or 0 if there is no `time` property
+    - `requestContext`: the [request](https://developer.mozilla.org/en-US/docs/Web/API/Request) intercepted by Mock Service Worker
+  - Return value:
+    - The amount of time that the response should be delayed, in milliseconds. The response will not be delayed if a value <= 0 is returned
+
+```js
+setRequestHandlersByWebarchive(worker, har, {
+  responseDelay: 'none'
+})
+```
+```js
+setRequestHandlersByWebarchive(worker, har, {
+  responseDelay: (timeDelay: number, requestContext: Request) => {
+    if (requestContext.url === 'http://example.com') {
+      return timeDelay * 2
+    }
+    return 0
+  }
+})
+```
+
 [msw-install]: https://mswjs.io/docs/getting-started/install
