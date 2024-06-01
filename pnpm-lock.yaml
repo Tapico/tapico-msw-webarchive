@@ -58,7 +58,7 @@ devDependencies:
     version: 29.7.0
   lint-staged:
     specifier: ^15.2.2
-    version: 15.2.4
+    version: 15.2.5
   msw:
     specifier: ^2.2.13
     version: 2.3.0(typescript@5.4.5)
@@ -139,7 +139,7 @@ packages:
       '@babel/traverse': 7.24.1
       '@babel/types': 7.24.0
       convert-source-map: 2.0.0
-      debug: 4.3.4
+      debug: 4.3.5
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -422,7 +422,7 @@ packages:
       '@babel/helper-split-export-declaration': 7.22.6
       '@babel/parser': 7.24.4
       '@babel/types': 7.24.0
-      debug: 4.3.4
+      debug: 4.3.5
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -2168,6 +2168,18 @@ packages:
       ms: 2.1.2
     dev: true
 
+  /debug@4.3.5:
+    resolution: {integrity: sha512-pt0bNEmneDIvdL1Xsd9oDQ/wrQRkXDT4AUWlNZNPKvW5x/jyO9VFXkJUP07vQ2upmw5PlaITaPKc31jK13V+jg==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+    dependencies:
+      ms: 2.1.2
+    dev: true
+
   /decamelize-keys@1.1.1:
     resolution: {integrity: sha512-WiPxgEirIV0/eIOMcnFBA3/IJZAZqKnwAwWyvvdi4lsr1WCN22nhdf/3db3DoZcUjTV2SqfzIwNyp6y2xs3nmg==}
     engines: {node: '>=0.10.0'}
@@ -3146,7 +3158,7 @@ packages:
     resolution: {integrity: sha512-n3s8EwkdFIJCG3BPKBYvskgXGoy88ARzvegkitk60NxRdwltLOTaH7CUiMRXvwYorl0Q712iEjcWB+fK/MrWVw==}
     engines: {node: '>=10'}
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.5
       istanbul-lib-coverage: 3.2.2
       source-map: 0.6.1
     transitivePeerDependencies:
@@ -3757,18 +3769,18 @@ packages:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
     dev: true
 
-  /lint-staged@15.2.4:
-    resolution: {integrity: sha512-3F9KRQIS2fVDGtCkBp4Bx0jswjX7zUcKx6OF0ZeY1prksUyKPRIIUqZhIUYAstJfvj6i48VFs4dwVIbCYwvTYQ==}
+  /lint-staged@15.2.5:
+    resolution: {integrity: sha512-j+DfX7W9YUvdzEZl3Rk47FhDF6xwDBV5wwsCPw6BwWZVPYJemusQmvb9bRsW23Sqsaa+vRloAWogbK4BUuU2zA==}
     engines: {node: '>=18.12.0'}
     hasBin: true
     dependencies:
       chalk: 5.3.0
       commander: 12.1.0
-      debug: 4.3.4
+      debug: 4.3.5
       execa: 8.0.1
       lilconfig: 3.1.1
       listr2: 8.2.1
-      micromatch: 4.0.6
+      micromatch: 4.0.7
       pidtree: 0.6.0
       string-argv: 0.3.2
       yaml: 2.4.2
@@ -3914,14 +3926,6 @@ packages:
   /merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
-    dev: true
-
-  /micromatch@4.0.6:
-    resolution: {integrity: sha512-Y4Ypn3oujJYxJcMacVgcs92wofTHxp9FzfDpQON4msDefoC0lb3ETvQLOdLcbhSwU1bz8HrL/1sygfBIHudrkQ==}
-    engines: {node: '>=8.6'}
-    dependencies:
-      braces: 3.0.3
-      picomatch: 4.0.2
     dev: true
 
   /micromatch@4.0.7:
@@ -4285,11 +4289,6 @@ packages:
   /picomatch@2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
-    dev: true
-
-  /picomatch@4.0.2:
-    resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
-    engines: {node: '>=12'}
     dev: true
 
   /pidtree@0.6.0:
