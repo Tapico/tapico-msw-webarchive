@@ -1,11 +1,34 @@
 import { delay, http, HttpResponse, ResponseResolver, HttpRequestHandler } from 'msw'
 
+export type ResponseDelayFunction = (timeDelay: number, requestContext: Request) => number
+
+export type ResponseDelayOption = 'real' | 'none' | ResponseDelayFunction 
+
 export interface ServerDefinitionOptions {
   strictQueryString?: boolean
   useUniqueRequests?: boolean
   resolveCrossOrigins?: (origin: string) => string
   quiet?: boolean
-  domainMappings?: Record<string, string>
+  domainMappings?: Record<string, string>,
+  responseDelay?: ResponseDelayOption,
+}
+
+/**
+ * @private
+ * Returns a function which calculates the response delay based on the chosen responseDelay option
+ * @param responseDelayOption The chosen responseDelay option or undefined if no option was chosen
+ */
+function getResponseDelayFunction(responseDelayOption?: ResponseDelayOption): ResponseDelayFunction {
+  if (responseDelayOption === 'none') {
+    return () => 0
+  }
+
+  if (typeof responseDelayOption === 'function') {
+    return responseDelayOption
+  }
+
+  // use real delay when responseDelay is 'real', not explicitly set, or set to an unexpected value
+  return timeDelay => timeDelay
 }
 
 /**
@@ -62,6 +85,8 @@ export const createRequestHandler = (entry: any, options?: ServerDefinitionOptio
       }
     }
   }
+
+  const responseDelayFunction = getResponseDelayFunction(options?.responseDelay)
 
   const requestMethod = request.method.toLowerCase()
   const supportedMethods = Object.keys(http).filter((method) => method !== 'all')
@@ -121,7 +146,8 @@ export const createRequestHandler = (entry: any, options?: ServerDefinitionOptio
     )
 
     // If the request-response pair has a `time`-property populated we use it as the delay for the mock response
-    const responseDelayTime = processingTime ? processingTime : 0
+    const responseDelayTimeFromHar = processingTime ? processingTime : 0
+    const responseDelayTime = responseDelayFunction(responseDelayTimeFromHar, request.clone())
     if (responseDelayTime > 0) {
       if (shouldLog) {
         logger('warn', `Response will be delayed with ${responseDelayTime}ms`)
