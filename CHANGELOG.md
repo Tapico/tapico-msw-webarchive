@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/Tapico/tapico-msw-webarchive/compare/v1.0.3...v1.1.0) (2024-06-08)
+
+
+### Features
+
+* Add responseDelay option ([#60](https://github.com/Tapico/tapico-msw-webarchive/issues/60)) ([bb08a6f](https://github.com/Tapico/tapico-msw-webarchive/commit/bb08a6ffef1e880d964bca415ce02f0e558a1cd0))
+
 ## [1.0.3](https://github.com/Tapico/tapico-msw-webarchive/compare/v1.0.2...v1.0.3) (2024-04-13)
 
 
